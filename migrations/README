@@ -1,0 +1,8 @@
+Generic single-database configuration.
+
+For this project we will be making a recipe sharing website. The website allows user sto create an account, post their recipes.
+
+The modules I used for this project are:
+- Flask
+- SQLAlchemy
+- PostgreSQL
