@@ -2,6 +2,8 @@
 
 **Currently in Progess** 
 
+
+
 ## About the Project
 In order to practically apply my understanding of API's I'm currently working on a simple Recipe Logging Website that I call the daily cook. The focus of this project is to understand REST API's better and be able to visualize and map out a user based application.
 
@@ -17,6 +19,8 @@ In order to practically apply my understanding of API's I'm currently working on
 **Pending**
 Deploy app on heroku.
 
+## Instructions to run
+```python app.py```
 
 ## Applications used:
 - PostgreSQL (pgadmin)
