@@ -1,0 +1,499 @@
+{
+	"info": {
+		"_postman_id": "49692314-384c-4116-bd55-dd5180760bc4",
+		"name": "TheDailyCook",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Token",
+			"item": [
+				{
+					"name": "Token",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\" : \"shayanariyaz@gmail.com\",\r\n    \"password\" : \"alephnot\"\r\n\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/token",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"token"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Refresh",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1OTUxMDE2MjEsIm5iZiI6MTU5NTEwMTYyMSwianRpIjoiMGVkOTI4ZmEtMWQzNy00OTQxLWI0MzktZTNmMmU1ZmFkODgwIiwiZXhwIjoxNTk3NjkzNjIxLCJpZGVudGl0eSI6MywidHlwZSI6InJlZnJlc2gifQ.XHZZSXOBMEFSkth2qq-2wJwDHZ5YPS5wLEb1_dUSdtw",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:5000/refresh",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"refresh"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Revoke",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1OTUxMDE2NDcsIm5iZiI6MTU5NTEwMTY0NywianRpIjoiZWY1MzJmZjgtN2U0OS00YTcxLTlhMzMtMDYzYjYyZWY1ODlkIiwiZXhwIjoxNTk1MTAyNTQ3LCJpZGVudGl0eSI6MywiZnJlc2giOmZhbHNlLCJ0eXBlIjoiYWNjZXNzIn0.aBiiVgyYfzRfXIRnm1wQcrhOWAMIfXZvOyuJI1jPVAQ",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/revoke",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"revoke"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "UserList",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\" : \"ShayanRiyaz\",\r\n    \"email\" : \"shayanariyaz@gmail.com\",\r\n    \"password\" : \"alephnot\"\r\n\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/users",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "User",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1OTU4NzkwMjcsIm5iZiI6MTU5NTg3OTAyNywianRpIjoiOWU1NzlhMzktYjQxNy00NzUyLTljODctMjdmYTM4NGIxYTNjIiwiZXhwIjoxNTk1ODc5OTI3LCJpZGVudGl0eSI6MTksImZyZXNoIjp0cnVlLCJ0eXBlIjoiYWNjZXNzIn0.zbwzHNrKorFhLHiheih9-x-4hpY03gnTuzMGfPM--Zo",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/users/ShayanRiyaz",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"users",
+								"ShayanRiyaz"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Me",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1OTUwOTMwNjIsIm5iZiI6MTU5NTA5MzA2MiwianRpIjoiZTFjNDQ1ZDktODAwZS00MTgwLTk3NzUtYjcwNTA1YTRlNWUxIiwiZXhwIjoxNTk1MDkzOTYyLCJpZGVudGl0eSI6MywiZnJlc2giOmZhbHNlLCJ0eXBlIjoiYWNjZXNzIn0.ZFAIQoXAWDi0vP6RnjD35rwYo0w0VoDUBKK6pexai8Q",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:5000/me",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"me"
+							],
+							"query": [
+								{
+									"key": "Authorization",
+									"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1OTUwOTEyOTQsIm5iZiI6MTU5NTA5MTI5NCwianRpIjoiZWExMDEzNzYtZDk5Yi00NGVmLWFiMzAtNzhjYzM1ZDFlYjZjIiwiZXhwIjoxNTk1MDkyMTk0LCJpZGVudGl0eSI6MywiZnJlc2giOmZhbHNlLCJ0eXBlIjoiYWNjZXNzIn0.3wn4poVVZhlK2rcQZzwvFuvNSaUBz4gnF23WyxJnooI",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UserRecipeList",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1OTUzMDk1NjEsIm5iZiI6MTU5NTMwOTU2MSwianRpIjoiMzNmYzZjZGItMDUxOC00MGQxLThjMWUtZWI2YTc0Zjc0NzQ0IiwiZXhwIjoxNTk1MzEwNDYxLCJpZGVudGl0eSI6MywiZnJlc2giOnRydWUsInR5cGUiOiJhY2Nlc3MifQ.dWzL7e0dBHMHpyvebW8nzvaaMoUpeK1ea6n_Xid63us",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:5000/users/Shayan/recipes?Visibility=all",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"users",
+								"Shayan",
+								"recipes"
+							],
+							"query": [
+								{
+									"key": "Visibility",
+									"value": "all"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UserAvatarUpload",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1OTU4NzkwMjcsIm5iZiI6MTU5NTg3OTAyNywianRpIjoiOWU1NzlhMzktYjQxNy00NzUyLTljODctMjdmYTM4NGIxYTNjIiwiZXhwIjoxNTk1ODc5OTI3LCJpZGVudGl0eSI6MTksImZyZXNoIjp0cnVlLCJ0eXBlIjoiYWNjZXNzIn0.zbwzHNrKorFhLHiheih9-x-4hpY03gnTuzMGfPM--Zo",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "avatar",
+									"type": "file",
+									"src": "/D:/OneDrive/Desktop/DSC_2718.jpg"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:5000/users/avatar",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"users",
+								"avatar"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Recipe",
+			"item": [
+				{
+					"name": "RecipeList",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1OTUyMzEzNzQsIm5iZiI6MTU5NTIzMTM3NCwianRpIjoiODc5MjU1MGEtMzlkNi00Yzc2LWI4MjEtZGUzZTNmMjY4NDM1IiwiZXhwIjoxNTk1MjMyMjc0LCJpZGVudGl0eSI6MywiZnJlc2giOnRydWUsInR5cGUiOiJhY2Nlc3MifQ.REheaIru9raINNAUDDU1hBq1v8dYG5mNyZkKizUaNDI",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\":\"Blueberry Smoothie\",\r\n    \"description\":\"This is a lovely Blueberry smoothie\",\r\n    \"num_of_servings\":2,\r\n    \"cook_time\":10,\r\n    \"directions\":\"This is how you make it\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/recipes",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"recipes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "RecipeList",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1OTUwOTMwNjIsIm5iZiI6MTU5NTA5MzA2MiwianRpIjoiZTFjNDQ1ZDktODAwZS00MTgwLTk3NzUtYjcwNTA1YTRlNWUxIiwiZXhwIjoxNTk1MDkzOTYyLCJpZGVudGl0eSI6MywiZnJlc2giOmZhbHNlLCJ0eXBlIjoiYWNjZXNzIn0.ZFAIQoXAWDi0vP6RnjD35rwYo0w0VoDUBKK6pexai8Q",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\":\"Cheeze Pizza\",\r\n    \"description\":\"This is a lovely cheese pizza\",\r\n    \"num_of_servings\":2,\r\n    \"cook_time\":30,\r\n    \"directions\":\"This is how you make it\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/recipes",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"recipes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Recipe",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1OTUwOTgxMTksIm5iZiI6MTU5NTA5ODExOSwianRpIjoiMWY0Nzg5YzUtNTBkOS00MjcyLWFjMTAtNjM5NmNiZjdhNzg5IiwiZXhwIjoxNTk1MDk5MDE5LCJpZGVudGl0eSI6MywiZnJlc2giOnRydWUsInR5cGUiOiJhY2Nlc3MifQ.duviiS101FmVSQJw5DM9cQ_qdH8UFnY6pqsKVqM7Ikk",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\":\"Cheeze Pizza\",\r\n    \"description\":\"This is a lovely cheese pizza\",\r\n    \"num_of_servings\":3,\r\n    \"cook_time\":30,\r\n    \"directions\":\"This is how you make it\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/recipes",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"recipes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "RecipePublish",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1OTUyMzEzNzQsIm5iZiI6MTU5NTIzMTM3NCwianRpIjoiODc5MjU1MGEtMzlkNi00Yzc2LWI4MjEtZGUzZTNmMjY4NDM1IiwiZXhwIjoxNTk1MjMyMjc0LCJpZGVudGl0eSI6MywiZnJlc2giOnRydWUsInR5cGUiOiJhY2Nlc3MifQ.REheaIru9raINNAUDDU1hBq1v8dYG5mNyZkKizUaNDI",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:5000/recipes/4/publish",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"recipes",
+								"4",
+								"publish"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Recipe",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1OTUwOTMwNjIsIm5iZiI6MTU5NTA5MzA2MiwianRpIjoiZTFjNDQ1ZDktODAwZS00MTgwLTk3NzUtYjcwNTA1YTRlNWUxIiwiZXhwIjoxNTk1MDkzOTYyLCJpZGVudGl0eSI6MywiZnJlc2giOmZhbHNlLCJ0eXBlIjoiYWNjZXNzIn0.ZFAIQoXAWDi0vP6RnjD35rwYo0w0VoDUBKK6pexai8Q",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "http://localhost:5000/recipes/3",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"recipes",
+								"3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Recipe",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1OTUwOTMwNjIsIm5iZiI6MTU5NTA5MzA2MiwianRpIjoiZTFjNDQ1ZDktODAwZS00MTgwLTk3NzUtYjcwNTA1YTRlNWUxIiwiZXhwIjoxNTk1MDkzOTYyLCJpZGVudGl0eSI6MywiZnJlc2giOmZhbHNlLCJ0eXBlIjoiYWNjZXNzIn0.ZFAIQoXAWDi0vP6RnjD35rwYo0w0VoDUBKK6pexai8Q",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "http://localhost:5000/recipes/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"recipes",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		}
+	],
+	"protocolProfileBehavior": {}
+}
