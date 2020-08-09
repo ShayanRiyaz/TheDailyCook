@@ -1,3 +1,5 @@
+![The Daily Cook](best-cooking-shows-igtv-chowhound.jpg)
+
 # The Daily Cook
 
 **Currently in Progess** 
