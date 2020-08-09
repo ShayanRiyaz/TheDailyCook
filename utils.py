@@ -37,6 +37,8 @@ def verify_token(token,max_age=(30*60),salt=None): # 30 minutes
 def save_image(image,folder):
     filename = f'{uuid.uuid4()}.{extension(image.filename)}'
     image_set.save(image,folder = folder,name = filename)
+    filename = compress_image(filename=filename,
+                              folder = folder)
     return filename
 
 def compress_image(filename,folder):

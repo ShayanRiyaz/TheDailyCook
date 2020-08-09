@@ -5,35 +5,20 @@ from models.recipe import Recipe
 from schemas.recipe import RecipeSchema
 from flask_jwt_extended import get_jwt_identity,jwt_required,jwt_optional
 
+import os
+from extensions import image_set
+from utils import save_image
 
+from webargs import fields
+from webargs.flaskparser import use_kwargs
+from schemas.recipe import RecipeSchema,RecipePaginationSchema
+
+# Serializing the Schemas
+recipe_cover_schema = RecipeSchema(only=('cover_url',))
 recipe_schema = RecipeSchema()
-
 recipe_list_schema = RecipeSchema(many=True)
+recipe_pagination_schema = RecipePaginationSchema()
 
-
-class RecipeListResource(Resource):
-    def get(self):
-        recipes = Recipe.get_all_published()
-        # data = []
-        # for recipe in recipes:
-        #     data.append(recipe.data())
-        return recipe_list_schema.dump(recipes).data, HTTPStatus.OK
-
-
-    @jwt_required
-    def post(self):
-        json_data = request.get_json()
-        current_user = get_jwt_identity()
-
-        data, errors = recipe_schema.load(data=json_data)
-        if errors:
-            return {'message':"Validation Errors",'errors':errors},HTTPStatus.BAD_REQUEST
-
-        recipe = Recipe(**data)
-        recipe.user_id = current_user
-        recipe.save()
-
-        return recipe_schema.dump(recipe),HTTPStatus.CREATED
 
 class RecipeResource(Resource):
 
@@ -113,6 +98,81 @@ class RecipePublishResource(Resource):
 
         return {},HTTPStatus.NO_CONTENT
 
+class RecipeListResource(Resource):
+    # Default value for the page parameter is 1
+    # Default value for the per_page parameter is 20.
+    # If nothing is passed we will be getting the first page
+    # with the first 20 records
+    @use_kwargs({'page':fields.Int(missing=1),
+                 'per_page': fields.Int(missing=20)})
+
+
+
+    def get(self,page,per_page):
+        """
+        Passed two arguments in the get_all_published method
+        to get the pagination object back. returns the
+        paginated recipes as serialized and back to front
+        end client.
+        """
+        paginated_recipes = Recipe.get_all_published(page,per_page)
+        return recipe_pagination_schema.dump(paginated_recipes).data,HTTPStatus.OK
+
+
+    @jwt_required
+    def post(self):
+        json_data = request.get_json()
+        current_user = get_jwt_identity()
+
+        data, errors = recipe_schema.load(data=json_data)
+        if errors:
+            return {'message':"Validation Errors",'errors':errors},HTTPStatus.BAD_REQUEST
+
+        recipe = Recipe(**data)
+        recipe.user_id = current_user
+        recipe.save()
+
+        return recipe_schema.dump(recipe),HTTPStatus.CREATED
+
+
+class RecipeCoverUploadResource(Resource):
+    @jwt_required               # states that the method can only be called after user has logged in.
+    def put(self,recipe_id):
+        """
+        Trying to get the cover image in request.files
+        and verify whether it exists and whether the file
+        extension is permitted
+        """
+        file = request.files.get('cover')
+        if not file:
+            return {'message':'Not a valid image'}, HTTPStatus.BAD_REQUEST
+
+        if not image_set.file_allowed(file,file.filename):
+            return {'message':'File type not allowed'}, HTTPStatus.BAD_REQUEST
+
+        # Check whether user hs the right to modify the recipe
+        recipe = Recipe.get_by_id(recipe_id = recipe_id)
+
+        if recipe is None:
+            return {'message':'Recipe not found'},HTTPStatus.NOT_FOUND
+        current_user = get_jwt_identity()
+        if current_user != recipe.user_id:
+            return {'message':'Access in not allowed'},HTTPStatus.FORBIDDEN
+
+        # If the user has the right to, we will go
+        # ahead and modify the cover image of the recipe
+        if recipe.cover_image:
+            cover_path = image_set.path(folder = 'recipes',
+                                        filename = recipe.cover_image)
+            if os.path.exists(cover_path):
+                os.remove(cover_path)
+
+        # User the save_image function to save the uploaded image
+        filename = save_image(image=file,folder = 'recipes')
+
+        recipe.cover_image = filename
+        recipe.save()
+        return recipe_cover_schema.dump(recipe).data,HTTPStatus.OK
 
 
 

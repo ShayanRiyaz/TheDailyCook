@@ -1,14 +1,14 @@
 from marshmallow import Schema, fields, post_dump, validate, validates, ValidationError
 from schemas.user import UserSchema
+from schemas.pagination import PaginationSchema
 
+from flask import url_for
 
 def validate_num_of_servings(n):
     if n < 1:
         raise ValidationError('Num of servings must be greater than 0')
     if n > 50:
         raise ValidationError('Number of servings must be less than 50.')
-
-
 
 class RecipeSchema(Schema):
     class Meta:
@@ -25,13 +25,8 @@ class RecipeSchema(Schema):
     created_at = fields.DateTime(dump_only = True)
     updated_at = fields.DateTime(dump_only=True)
     authors = fields.Nested(UserSchema,attribute='user',dump_only=True,exlude=('email',))
+    cover_url = fields.Method(serialize='dump_cover_url')
 
-
-    @post_dump(pass_many = True)
-    def wrap(self,data,many,**kwargs):
-        if many:
-            return {'data': data}
-        return data
 
     @validates('cook_time')
     def validate_cook_time(self,value):
@@ -40,4 +35,17 @@ class RecipeSchema(Schema):
         if value > 300:
             raise ValidationError('Cook time must not be greater than 300.')
 
+    def dump_cover_url(self, recipe):
+        if recipe.cover_image:
+            return url_for('static', filename=f'images/recipes/{recipe.cover_image}', _external=True)
 
+        else:
+            return url_for('static', filename='images/assets/default-recipe-cover-image.jpg', _external=True)
+
+class RecipePaginationSchema(PaginationSchema):
+    data = fields.Nested(RecipeSchema,
+                         attribute = 'items',
+                         many = True)
+    # The attribute name in the final JSON response will be data in the method above.
+    # Because attribute = 'items' means that it is getting the source data from the items
+    # to attribute in the pagination objects
