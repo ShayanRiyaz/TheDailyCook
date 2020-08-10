@@ -1,14 +1,13 @@
 from flask import request
 from flask_restful import Resource
+from flask_jwt_extended import get_jwt_identity,jwt_required,jwt_optional
 from http import HTTPStatus
 from models.recipe import Recipe
 from schemas.recipe import RecipeSchema
-from flask_jwt_extended import get_jwt_identity,jwt_required,jwt_optional
 
 import os
-from extensions import image_set
-from utils import save_image
-
+from extensions import image_set,cache, limiter
+from utils import save_image, clear_cache
 from webargs import fields
 from webargs.flaskparser import use_kwargs
 from schemas.recipe import RecipeSchema,RecipePaginationSchema
@@ -24,10 +23,13 @@ class RecipeResource(Resource):
 
     @jwt_optional
     def get(self,recipe_id):
+
+
         """
 
         :param
         """
+
         recipe = Recipe.get_by_id(recipe_id = recipe_id)
         if recipe is None:
             return {'message':'Recipe not found'}, HTTPStatus.NOT_FOUND
@@ -62,14 +64,15 @@ class RecipeResource(Resource):
             return {'message':'Access is not Allowed'}, HTTPStatus.FORBIDDEN
 
 
-        recipe.name = json_data['name'] or recipe.name
-        recipe.description = json_data['description'] or recipe.description
-        recipe.num_of_servings = json_data['num_of_servings'] or recipe.num_of_servings
-        recipe.cook_time = json_data['cook_time'] or recipe.cook_time
-        recipe.directions = json_data['directions'] or recipe.directions
+        recipe.name = data.get('name') or recipe.name
+        recipe.description = data.get('description') or recipe.description
+        recipe.num_of_servings = data.get('num_of_servings') or recipe.num_of_servings
+        recipe.cook_time = data.get('cook_time') or recipe.cook_time
+        recipe.directions = data.get('directions') or recipe.directions
         recipe.ingredients = data.get('ingredients') or recipe.ingredients
         recipe.save()
 
+        clear_cache('/recipes') # clears old cache data when updated
         return recipe_schema.dump(recipe).data, HTTPStatus.OK
 
     @jwt_required
@@ -87,6 +90,8 @@ class RecipeResource(Resource):
         if current_user != recipe.user_id:
             return {'message':'Access is no allowed'},HTTPStatus.FORBIDDEN
         recipe.delete()
+
+        clear_cache('/recipes') # clears old cache data when updated
         return {},HTTPStatus.NO_CONTENT
 
 class RecipePublishResource(Resource):
@@ -108,6 +113,8 @@ class RecipePublishResource(Resource):
         recipe.is_publish = True
         #recipe.is_publish = True
         recipe.save()
+
+        clear_cache('/recipes') # clears old cache data when updated
         return {}, HTTPStatus.NO_CONTENT
 
     @jwt_required
@@ -124,19 +131,25 @@ class RecipePublishResource(Resource):
 
         recipe.is_pubish = False
 
+        clear_cache('/recipes') # clears old cache data when updated
         return {},HTTPStatus.NO_CONTENT
 
 class RecipeListResource(Resource):
+
+    decorators = [limiter.limit('2 per minute', methods=['GET'], error_message='Too Many Requests')]
+
     # Default value for the page parameter is 1
     # Default value for the per_page parameter is 20.
     # If nothing is passed we will be getting the first page
     # with the first 20 records
+
     @use_kwargs({'q':fields.Str(missing=''),
                  'page':fields.Int(missing=1),
                  'per_page': fields.Int(missing=20),
                  'sort':fields.Str(missing='created_at'),
                  'order':fields.Str(missing='desc')})
 
+    @cache.cached(timeout=60,query_string=True) # True means that it allows passing in of arguments
     def get(self,q,page,per_page,sort,order):
         """
         Passes three arguments in the get_all_published method
@@ -144,6 +157,7 @@ class RecipeListResource(Resource):
         paginated recipes as serialized and back to front
         end client. The q parameter passed the search string into the API
         """
+        print('Querying database')
         if sort not in['created_at','cook_time','num_of_servings']:
             sort = 'created_at'
         if order not in ['asc','desc']:
@@ -208,6 +222,7 @@ class RecipeCoverUploadResource(Resource):
 
         recipe.cover_image = filename
         recipe.save()
+        clear_cache('/recipes') # clears old cache data when updated
         return recipe_cover_schema.dump(recipe).data,HTTPStatus.OK
 
 

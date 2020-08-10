@@ -11,3 +11,11 @@ class Config:
     JWT_BLACKLIST_TOKEN_CHECKS = ['access','refresh']
 
     UPLOADED_IMAGES_DEST = 'static/images'
+
+    CACHE_TYPE = 'simple'   # Default CACHE_TYPE is Null
+    CACHE_DEFAULT_TIMEOUT = 10*60 # Expiration time is 10 minutes
+
+    RATELIMIT_HEADERS_ENABLED = True
+
+
+

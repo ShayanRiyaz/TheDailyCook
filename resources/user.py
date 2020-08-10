@@ -13,8 +13,8 @@ from models.user import User
 from schemas.recipe import RecipeSchema
 from schemas.user import UserSchema
 
-from extensions import image_set
-from utils import generate_token,verify_token, save_image
+from extensions import image_set, limiter
+from utils import generate_token,verify_token, save_image,clear_cache
 from schemas.recipe import RecipeSchema, RecipePaginationSchema
 
 import os
@@ -28,6 +28,9 @@ recipe_pagination_schema = RecipePaginationSchema()
 mailgun = MailgunApi(domain=os.environ.get('MAILGUN_DOMAIN'),
                      api_key=os.environ.get('MAILGUN_API_KEY'))
 class UserListResource(Resource):
+
+    decorators = [limiter.limit('3/minute;30/hour;300/day',methods = ['GET'],error_message='Too Many Requests')]
+
     def post(self):
         json_data = request.get_json()
         data,errors = user_schema.load(data = json_data)
@@ -161,5 +164,5 @@ class UserAvatarUploadResource(Resource):
                               folder='avatars')
         user.avatar_image = filename
         user.save()
-
+        clear_cache('/recipes') # clears old cache data when updated
         return user_avatar_schema.dump(user).data, HTTPStatus.OK

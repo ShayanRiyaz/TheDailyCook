@@ -1,8 +1,8 @@
-from flask import Flask
+from flask import Flask,request
 from flask_migrate import Migrate
 from flask_restful import Api
 from flask_uploads import configure_uploads, patch_request_class
-from extensions import db, jwt, image_set
+from extensions import db, jwt, image_set,cache,limiter
 
 from config import Config
 
@@ -10,6 +10,9 @@ from resources.recipe import RecipeListResource, RecipeResource, RecipePublishRe
 from resources.user import UserListResource, UserResource, MeResource, UserRecipeListResource, UserActivateResource, UserAvatarUploadResource
 from resources.token import TokenResource, RefreshResource,RevokeResource,black_list
 
+# @limiter.request_filter
+# def ip_whitelist():
+#     return request.remote_addr =='127.0.0.1'
 
 def create_app():
     app = Flask(__name__)
@@ -26,12 +29,22 @@ def register_extensions(app):
     jwt.init_app(app)
     configure_uploads(app, image_set)
     patch_request_class(app, 10 * 1024 * 1024)
-
+    cache.init_app(app)
+    limiter.init_app(app)
 
     @jwt.token_in_blacklist_loader
     def check_if_token_in_black(decrypted_token):
         jti = decrypted_token['jti']
         return jti in black_list
+
+    @app.before_request
+    def before_request():
+        print(cache.cache._cache.keys())
+
+    @app.after_request
+    def after_request(response):
+        print(cache.cache._cache.keys())
+        return response
 
 def register_resources(app):
     api = Api(app)

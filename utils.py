@@ -4,7 +4,7 @@ from flask import current_app
 
 import uuid
 from flask_uploads import extension
-from extensions import image_set
+from extensions import image_set,cache
 
 import os
 from PIL import Image
@@ -74,3 +74,15 @@ def save_image(image,folder):
     filename = compress_image(filename=filename,folder = folder)
 
     return filename
+
+def clear_cache(key_prefix):
+    """
+    This method uses iterates all the keys in the cache.
+    If the key is prefixed with the passed in prefix,
+     it will be places on the keys list. Lastly, the cache is cleared.
+    :param
+    key_prefix
+    """
+    keys = [key for key in cache.cache._cache.keys() if key.startswith(key_prefix)]
+    cache.delete_many(*keys)
+
