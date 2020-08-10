@@ -211,11 +211,31 @@ These two caching and rate limiting functions are very common and powerful in re
 
 ### Caching to improve API performance and efficiently get the last information
 
-### Add the cache function to the The Daily Cook application using the Flask-Caching package.
+Caching means storing data in a temporary space (a cache) so that it can be retrieved faster in subsequent requests. The temporary space can be application memory, server hard disk space, or something else. **The whole purpose of caching is to lighted the workload by avoiding process for querying the data again.**
+
+*for sever-level caching, most of the time, the cache is stored in the same web server as the application. Technically speaking, it can be stored in another server as well (for example. Redis (Remote Dictionairy Server) or Memcached (a high-performance distributed cached memory))*
+
+### Benefit of Caching and Flask-Caching
+
+Through caching along with reducing the volume of the data transferred we can also improve the overall performance. This is done by reducing the bandwidth required, reducing the server loading time and more.
+
+Flask-Caching is a Flask-extension package that allows us to easily implement caching functionality. 
+
+*Imagine a cache as a dictionary object that contains key-value pairs. The key is here used to specify the resource to cache, where as the value is used to store the actual data to be cached.* 
+
+**Add the cache function to the The Daily Cook application using the Flask-Caching package.**
 
 ### Implement rate-limiting functionality to an API
 
-### Use IP address to perform rate limiting.
+What is API Limiting?
+
+When we provide an API service, we need to ensure fair usage for every user so that the system resources are effectively and fairly serving all. We want to make sure that majority users are getting good performance; therefore we apply restrictions. 
+
+*By limiting a small number of high traffic users, we can make sure that the majority of users are satisfied.*
+
+*The way to approach this is to set a limit per user. For example:*
+
+we can limit a small number of requests per user to be no more than 100 per second. This number will be enough for the normal usage of our API.
 
 
 
