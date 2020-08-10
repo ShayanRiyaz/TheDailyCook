@@ -26,7 +26,7 @@ class RecipeSchema(Schema):
     updated_at = fields.DateTime(dump_only=True)
     authors = fields.Nested(UserSchema,attribute='user',dump_only=True,exlude=('email',))
     cover_url = fields.Method(serialize='dump_cover_url')
-
+    ingredients = fields.String(validate = [validate.Length(max=1000)])
 
     @validates('cook_time')
     def validate_cook_time(self,value):

@@ -14,8 +14,8 @@ from webargs.flaskparser import use_kwargs
 from schemas.recipe import RecipeSchema,RecipePaginationSchema
 
 # Serializing the Schemas
-recipe_cover_schema = RecipeSchema(only=('cover_url',))
 recipe_schema = RecipeSchema()
+recipe_cover_schema = RecipeSchema(only=('cover_url',))
 recipe_list_schema = RecipeSchema(many=True)
 recipe_pagination_schema = RecipePaginationSchema()
 
@@ -24,6 +24,10 @@ class RecipeResource(Resource):
 
     @jwt_optional
     def get(self,recipe_id):
+        """
+
+        :param
+        """
         recipe = Recipe.get_by_id(recipe_id = recipe_id)
         if recipe is None:
             return {'message':'Recipe not found'}, HTTPStatus.NOT_FOUND
@@ -36,30 +40,44 @@ class RecipeResource(Resource):
 
 
     @jwt_required
-    def put(self,recipe_id):
+    def patch(self,recipe_id):
+        """
+
+        :param
+        """
 
         json_data = request.get_json()
 
-        recipe = Recipe.get_by_id(recipe_id = recipe_id)
+        data,errors = recipe_schema.load(data=json_data,partial=('name',))
 
+        if errors:
+            return {'message': 'Validation errors', 'errors': errors}, HTTPStatus.BAD_REQUEST
+
+        recipe = Recipe.get_by_id(recipe_id = recipe_id)
         if recipe is None:
-            return {'message':'recipe not found'}, HTTPStatus.NOT_FOUND
+            return {'message':'Recipe not found'}, HTTPStatus.NOT_FOUND
 
         current_user = get_jwt_identity()
         if current_user != recipe.user_id:
             return {'message':'Access is not Allowed'}, HTTPStatus.FORBIDDEN
 
-        recipe.name = json_data['name']
-        recipe.description = json_data['description']
-        recipe.num_of_servings = json_data['num_of_servings']
-        recipe.cook_time = json_data['cook_time']
-        recipe.directions = json_data['directions']
+
+        recipe.name = json_data['name'] or recipe.name
+        recipe.description = json_data['description'] or recipe.description
+        recipe.num_of_servings = json_data['num_of_servings'] or recipe.num_of_servings
+        recipe.cook_time = json_data['cook_time'] or recipe.cook_time
+        recipe.directions = json_data['directions'] or recipe.directions
+        recipe.ingredients = data.get('ingredients') or recipe.ingredients
         recipe.save()
 
-        return recipe.data(), HTTPStatus.OK
+        return recipe_schema.dump(recipe).data, HTTPStatus.OK
 
     @jwt_required
     def delete(self,recipe_id):
+        """
+        :param
+
+        """
         recipe = Recipe.get_by_id(recipe_id=recipe_id)
         if recipe is None:
             return {'message':'Recipe not found'}, HTTPStatus.NOT_FOUND
@@ -74,8 +92,13 @@ class RecipeResource(Resource):
 class RecipePublishResource(Resource):
     @jwt_required
     def put(self,recipe_id):
+        """
 
-        #recipe = next((recipe for recipe in recipe_list if recipe.id == recipe_id),None)
+        :param
+
+        """
+
+
         recipe = Recipe.get_by_id(recipe_id =recipe_id)
         if recipe is None:
             return {'message':'recipe not found'}, HTTPStatus.NOT_FOUND
@@ -86,8 +109,13 @@ class RecipePublishResource(Resource):
         #recipe.is_publish = True
         recipe.save()
         return {}, HTTPStatus.NO_CONTENT
+
     @jwt_required
     def delete(self,recipe_id):
+        """
+        :param
+
+        """
 
         recipe = next((recipe for recipe in recipe_list if recipe.id == recipe_id),None)
 
@@ -103,24 +131,32 @@ class RecipeListResource(Resource):
     # Default value for the per_page parameter is 20.
     # If nothing is passed we will be getting the first page
     # with the first 20 records
-    @use_kwargs({'page':fields.Int(missing=1),
-                 'per_page': fields.Int(missing=20)})
+    @use_kwargs({'q':fields.Str(missing=''),
+                 'page':fields.Int(missing=1),
+                 'per_page': fields.Int(missing=20),
+                 'sort':fields.Str(missing='created_at'),
+                 'order':fields.Str(missing='desc')})
 
-
-
-    def get(self,page,per_page):
+    def get(self,q,page,per_page,sort,order):
         """
-        Passed two arguments in the get_all_published method
-        to get the pagination object back. returns the
+        Passes three arguments in the get_all_published method
+        and gets the pagination object back. returns the
         paginated recipes as serialized and back to front
-        end client.
+        end client. The q parameter passed the search string into the API
         """
-        paginated_recipes = Recipe.get_all_published(page,per_page)
-        return recipe_pagination_schema.dump(paginated_recipes).data,HTTPStatus.OK
+        if sort not in['created_at','cook_time','num_of_servings']:
+            sort = 'created_at'
+        if order not in ['asc','desc']:
+            order = 'desc'
 
+        paginated_recipes = Recipe.get_all_published(q,page,per_page,sort,order)
+        return recipe_pagination_schema.dump(paginated_recipes).data,HTTPStatus.OK
 
     @jwt_required
     def post(self):
+        """:param
+
+        """
         json_data = request.get_json()
         current_user = get_jwt_identity()
 
@@ -139,8 +175,8 @@ class RecipeCoverUploadResource(Resource):
     @jwt_required               # states that the method can only be called after user has logged in.
     def put(self,recipe_id):
         """
-        Trying to get the cover image in request.files
-        and verify whether it exists and whether the file
+        Gets the cover image in request.files
+        and verifies whether it exists and if the file
         extension is permitted
         """
         file = request.files.get('cover')

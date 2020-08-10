@@ -15,6 +15,7 @@ from schemas.user import UserSchema
 
 from extensions import image_set
 from utils import generate_token,verify_token, save_image
+from schemas.recipe import RecipeSchema, RecipePaginationSchema
 
 import os
 
@@ -22,6 +23,7 @@ user_schema = UserSchema()
 user_public_schema = UserSchema(exclude=('email',))
 recipe_list_schema = RecipeSchema(many=True)
 user_avatar_schema = UserSchema(only=('avatar_url',))
+recipe_pagination_schema = RecipePaginationSchema()
 
 mailgun = MailgunApi(domain=os.environ.get('MAILGUN_DOMAIN'),
                      api_key=os.environ.get('MAILGUN_API_KEY'))
@@ -86,23 +88,31 @@ class MeResource(Resource):
 
 
 class UserRecipeListResource(Resource):
-    @jwt_optional
-    @use_kwargs({'visibility':fields.Str(missing = 'public')})
+        @jwt_optional
+        @use_kwargs({'page':fields.Int(missing=1),
+                     'per_page':fields.Int(missing=10),
+                     'visibility':fields.Str(missing ='public')})
 
-    def get(self,username,visibility):
-        user = User.get_by_username(username = username)
 
-        if user is None:
-            return {'message':'User not found'}, HTTPStatus.NOT_FOUND
+        def get(self,username,page,per_page,visibility):
+            user = User.get_by_username(username=username)
 
-        current_user = get_jwt_identity()
-        if current_user == user.id and visibility in ['all','private']:
-            pass
-        else:
-            visibility = 'public'
-        recipes = Recipe.get_all_by_user(user_id = user.id,visibility = visibility)
+            user = User.get_by_username(username = username)
 
-        return recipe_list_schema.dump(recipes).data,HTTPStatus.OK
+            if user is None:
+                return {'message':'User not found'}, HTTPStatus.NOT_FOUND
+
+            current_user = get_jwt_identity()
+            if current_user == user.id and visibility in ['all','private']:
+                pass
+            else:
+                visibility = 'public'
+
+            # gets the paginated recipes by a particular author
+            # lets recipe_pagination_schema serialize the paginated object.
+            paginated_recipes = Recipe.get_all_by_user(user_id = user.id,page=page,per_page=per_page,visibility = visibility)
+
+            return recipe_pagination_schema.dump(paginated_recipes).data,HTTPStatus.OK
 
 
 class UserActivateResource(Resource):
