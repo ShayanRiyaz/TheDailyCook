@@ -1,11 +1,10 @@
 import os
-from flask import Flask,request
+from flask import Flask, request
 from flask_migrate import Migrate
 from flask_restful import Api
 from flask_uploads import configure_uploads, patch_request_class
 from extensions import db, jwt, image_set,cache,limiter
-
-
+#import flask
 from config import Config
 
 from resources.recipe import RecipeListResource, RecipeResource, RecipePublishResource, RecipeCoverUploadResource
