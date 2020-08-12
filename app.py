@@ -10,11 +10,20 @@ from resources.recipe import RecipeListResource, RecipeResource, RecipePublishRe
 from resources.user import UserListResource, UserResource, MeResource, UserRecipeListResource, UserActivateResource, UserAvatarUploadResource
 from resources.token import TokenResource, RefreshResource,RevokeResource,black_list
 
+import os
 # @limiter.request_filter
 # def ip_whitelist():
 #     return request.remote_addr =='127.0.0.1'
 
 def create_app():
+    env = os.environ.get('ENV','Development')
+
+    if env == 'Production':
+        config_str = 'config.ProductionConfig'
+    elif env =='Staging':
+        config_str = 'config.StagingConfig'
+    else:
+        config_str = 'config.DevelopmentConfig'
     app = Flask(__name__)
     app.config.from_object(Config)
 
