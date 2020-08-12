@@ -29,6 +29,12 @@ class DevelopmentConfig(Config):
     SECRET_KEY = 'super-secret-key'
     SQLALCHEMY_DATABASE_URI = 'postgresql+psycopg2://Shayan_Riyaz:empirestate@localhost:5432/TheDailyCook'
 
+class StagingConfig(Config):
+
+    SECRET_KEY = os.environ.get('SECRET_KEY')
+
+    SQLALCHEMY_TRACK_MODIFICATIONS = os.environ.get('DATABASE_URL')
+
 
 class ProductionConfig(Config):
     """
@@ -40,9 +46,6 @@ class ProductionConfig(Config):
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL')
 
 
-class StagingConfig(Config):
-    SECRET_KEY = os.environ('SECRET_KEY')
-    SQLALCHEMY_TRACK_MODIFICATIONS = os.environ('DATABASE_URL')
 
 
 
