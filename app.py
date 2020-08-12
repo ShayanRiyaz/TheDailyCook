@@ -20,19 +20,18 @@ def create_app():
 
     if env == 'Production':
         config_str = 'config.ProductionConfig'
-    elif env =='Staging':
+    elif env == 'Staging':
         config_str = 'config.StagingConfig'
     else:
         config_str = 'config.DevelopmentConfig'
     app = Flask(__name__)
-    app.config.from_object(Config)
+    app.config.from_object(config_str)
 
     register_extensions(app)
     register_resources(app)
     return app
 
 def register_extensions(app):
-    db.app = app
     db.init_app(app)
     migrate = Migrate(app,db)
     jwt.init_app(app)
@@ -46,14 +45,14 @@ def register_extensions(app):
         jti = decrypted_token['jti']
         return jti in black_list
 
-    @app.before_request
-    def before_request():
-        print(cache.cache._cache.keys())
-
-    @app.after_request
-    def after_request(response):
-        print(cache.cache._cache.keys())
-        return response
+    # @app.before_request
+    # def before_request():
+    #     print(cache.cache._cache.keys())
+    #
+    # @app.after_request
+    # def after_request(response):
+    #     print(cache.cache._cache.keys())
+    #     return response
 
 def register_resources(app):
     api = Api(app)
