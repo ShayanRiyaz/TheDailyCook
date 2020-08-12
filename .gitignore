@@ -1,0 +1,4 @@
+static/images/avatars/*
+static/images/recipes*
+.idea/
+venv/
