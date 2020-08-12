@@ -1,3 +1,4 @@
+import os
 from flask import Flask,request
 from flask_migrate import Migrate
 from flask_restful import Api
@@ -10,10 +11,7 @@ from resources.recipe import RecipeListResource, RecipeResource, RecipePublishRe
 from resources.user import UserListResource, UserResource, MeResource, UserRecipeListResource, UserActivateResource, UserAvatarUploadResource
 from resources.token import TokenResource, RefreshResource,RevokeResource,black_list
 
-import os
-# @limiter.request_filter
-# def ip_whitelist():
-#     return request.remote_addr =='127.0.0.1'
+
 
 def create_app():
     env = os.environ.get('ENV','Development')
@@ -24,11 +22,13 @@ def create_app():
         config_str = 'config.StagingConfig'
     else:
         config_str = 'config.DevelopmentConfig'
+
     app = Flask(__name__)
     app.config.from_object(config_str)
 
     register_extensions(app)
     register_resources(app)
+
     return app
 
 def register_extensions(app):
@@ -44,6 +44,10 @@ def register_extensions(app):
     def check_if_token_in_black(decrypted_token):
         jti = decrypted_token['jti']
         return jti in black_list
+
+    # @limiter.request_filter
+    # def ip_whitelist():
+    #     return request.remote_addr =='127.0.0.1'
 
     # @app.before_request
     # def before_request():

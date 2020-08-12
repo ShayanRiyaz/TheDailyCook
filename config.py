@@ -26,7 +26,9 @@ class DevelopmentConfig(Config):
     us to see the error messages while we are developing
     """
     DEBUG = True
+
     SECRET_KEY = 'super-secret-key'
+
     SQLALCHEMY_DATABASE_URI = 'postgresql+psycopg2://Shayan_Riyaz:empirestate@localhost:5432/TheDailyCook'
 
 class StagingConfig(Config):
