@@ -1,4 +1,2 @@
-# for heroku to run during the app start-up process
-
-release:flask db upgrade # runs after every deployment
+release:flask db upgrade
 web: gunicorn main:app
