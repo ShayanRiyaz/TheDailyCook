@@ -2,7 +2,6 @@
 
 # The Daily Cook
 
-**Currently in Progess** 
 
 ## About the Project
 In order to practically apply my understanding of API's I'm currently working on a simple Recipe Logging Website that I call the daily cook. The focus of this project is to understand REST API's better and be able to visualize and map out a user based application.
@@ -42,7 +41,9 @@ Deploy app on heroku.
 |itsdangerous       |1.1.0     |-                                           |
 |Flask-Uploads       |0.2.1    | Uploading Image Avatar to the user profile | 
 |Pillow             |7.1.0     | Refactoring and compressing images         |
-
+|Flask-Limiter|1.0.1||
+|gunicorn           |19.9.0| |
+|Werkzeug|0.15.6||
 
 
 
