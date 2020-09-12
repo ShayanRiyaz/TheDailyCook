@@ -23,11 +23,12 @@ class RecipeResource(Resource):
 
     @jwt_optional
     def get(self,recipe_id):
-
-
         """
-
-        :param
+        This function sends the command GET to the backend server in order to get the requested recipe.
+        
+        :param:
+        recipe_id : the id of the recipe.
+        
         """
 
         recipe = Recipe.get_by_id(recipe_id = recipe_id)
@@ -44,8 +45,11 @@ class RecipeResource(Resource):
     @jwt_required
     def patch(self,recipe_id):
         """
-
-        :param
+        Makes modifications to a preexisting recipe.
+        The JSON Web Token from the user of origin is required to make changes to the recipe.
+        
+        :params:
+        recipe_id : The id of the recipe subject to change.
         """
 
         json_data = request.get_json()
@@ -78,7 +82,9 @@ class RecipeResource(Resource):
     @jwt_required
     def delete(self,recipe_id):
         """
-        :param
+        Delete a pre-existing recipe.
+        :params:
+        recipe_id : id of the recipe subject to deletion.
 
         """
         recipe = Recipe.get_by_id(recipe_id=recipe_id)
@@ -149,6 +155,7 @@ class RecipeListResource(Resource):
                  'sort':fields.Str(missing='created_at'),
                  'order':fields.Str(missing='desc')})
 
+    
     @cache.cached(timeout=60,query_string=True) # True means that it allows passing in of arguments
     def get(self,q,page,per_page,sort,order):
         """
