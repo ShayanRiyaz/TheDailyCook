@@ -55,6 +55,8 @@ def register_resources(app):
     Adds all the API resources from the respective directories.
     Divided into three main categories.
     Users, Token (JWT) and Recipes.
+    
+    :params: app - Flask application.
     """
     api = Api(app)
     api.add_resource(UserListResource,'/users')
