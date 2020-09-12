@@ -1,7 +1,10 @@
 import requests
 
 class MailgunApi:
-
+    """ 
+    Class to send automated emails to users, in order to verify their accounts
+    """
+    
     API_URL = 'https://api.mailgun.net/v3/{}/messages'
 
     def __init__(self,domain,api_key):
