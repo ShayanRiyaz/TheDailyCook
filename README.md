@@ -1,4 +1,4 @@
-![The Daily Cook](best-cooking-shows-igtv-chowhound.jpg)
+![The Daily Cook](assets/README_cover.jpg)
 
 # The Daily Cook
 
