@@ -14,6 +14,11 @@ from resources.token import TokenResource, RefreshResource,RevokeResource,black_
 
 
 def create_app():
+    """
+    Creates the app in either Production, Staging or Development Configuration.
+    Default is set to Development.
+    
+    """
     env = os.environ.get('ENV','Development')
 
     if env == 'Production':
@@ -45,20 +50,12 @@ def register_extensions(app):
         jti = decrypted_token['jti']
         return jti in black_list
 
-    # @limiter.request_filter
-    # def ip_whitelist():
-    #     return request.remote_addr =='127.0.0.1'
-
-    # @app.before_request
-    # def before_request():
-    #     print(cache.cache._cache.keys())
-    #
-    # @app.after_request
-    # def after_request(response):
-    #     print(cache.cache._cache.keys())
-    #     return response
-
 def register_resources(app):
+    """
+    Adds all the API resources from the respective directories.
+    Divided into three main categories.
+    Users, Token (JWT) and Recipes.
+    """
     api = Api(app)
     api.add_resource(UserListResource,'/users')
     api.add_resource(UserResource,'/users/<string:username>')
