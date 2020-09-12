@@ -1,6 +1,6 @@
 Generic single-database configuration.
 
-For this project we will be making a recipe sharing website. The website allows user sto create an account, post their recipes.
+For this project we will be making a recipe sharing website. The website allows user to create an account, post their recipes.
 
 The modules I used for this project are:
 - Flask
