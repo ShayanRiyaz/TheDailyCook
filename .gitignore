@@ -2,3 +2,4 @@ static/images/avatars/*
 static/images/recipes*
 .idea/
 venv/
+__pycache__
